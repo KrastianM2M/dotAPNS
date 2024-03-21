@@ -32,7 +32,7 @@ namespace dotAPNS
         public int? Badge { get; private set; }
 
         [CanBeNull]
-        public string Sound { get; private set; }
+        public object Sound { get; private set; }
 
         /// <summary>
         /// See <a href="https://developer.apple.com/documentation/usernotifications/unnotificationcontent/1649866-categoryidentifier">official documentation</a> for reference.
@@ -224,6 +224,24 @@ namespace dotAPNS
             if (Sound != null)
                 throw new InvalidOperationException("Sound already exists");
             Sound = sound;
+            return this;
+        }
+
+        public ApplePush AddCriticalSound(double volume,[NotNull] string sound = "default")
+        {
+            if (string.IsNullOrWhiteSpace(sound))
+                throw new ArgumentException("Value cannot be null or whitespace.", nameof(sound));
+            if (volume < 0 || volume > 1)
+                throw new ArgumentException("Value should be between 0 (silent) and 1 (full volume)", nameof(sound));
+            IsContentAvailableGuard();
+            if (Sound != null)
+                throw new InvalidOperationException("Sound already exists");
+            Sound = new
+            {
+                critical = 1,
+                name = sound,
+                volume
+            };
             return this;
         }
 

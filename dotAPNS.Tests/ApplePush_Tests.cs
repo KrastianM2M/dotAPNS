@@ -13,6 +13,7 @@ namespace dotAPNS.Tests
 
             Assert.Throws<InvalidOperationException>(() => pushWithContentAvailable.AddBadge(0));
             Assert.Throws<InvalidOperationException>(() => pushWithContentAvailable.AddSound("sound"));
+            Assert.Throws<InvalidOperationException>(() => pushWithContentAvailable.AddCriticalSound(0.5,"sound"));
         }
 
         [Fact]
